@@ -1,10 +1,11 @@
 //Arduino Clock Divider for Modular Synthesis 
 //Shaurjya Banerjee & Ness Morris 2016
 
-//With controls
+//Variables for knob control
 int control1 = 0;
 int control2 = 0;
 
+//Defining output pins
 int pin_1 = 7; 
 int pin0  = 8;
 int pin1  = 9;
@@ -21,9 +22,12 @@ volatile bool out3  = false;
 volatile bool out4  = false;
 volatile bool out5  = false;
 
+//Counter variable for input clock pulses
 volatile int count = 0;
 
-void setup() {
+void setup() 
+{
+    //Setting pins as output
     pinMode(pin_1, OUTPUT);
     pinMode(pin0,  OUTPUT);
     pinMode(pin1,  OUTPUT);
@@ -32,15 +36,18 @@ void setup() {
     pinMode(pin4,  OUTPUT);
     pinMode(pin5,  OUTPUT);
     
+    //Interrupt for clock divide function
     attachInterrupt(1, divide, RISING);
     Serial.begin(9600);
 }
 
 void loop()
 {
+    //Poll knobs for control value
     control1 = analogRead(4);
     control2 = analogRead(5);
   
+    //Set the states of output pins  
     digitalWrite(pin_1, pin_1);
     digitalWrite(pin0,  out0);
     digitalWrite(pin1,  out1);
@@ -49,10 +56,12 @@ void loop()
     digitalWrite(pin4,  out4);
     digitalWrite(pin5,  out5);
    
+    //Send serial control data to ChucK
     Serial.println(control1);
     Serial.println(control2);
 }
 
+//Clock divider function
 void divide() {
  
   out_1 = !out_1;
