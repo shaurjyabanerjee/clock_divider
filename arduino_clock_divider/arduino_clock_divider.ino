@@ -1,6 +1,9 @@
 //Arduino Clock Divider for Modular Synthesis 
 //Shaurjya Banerjee & Ness Morris 2016
 
+int control1 = 0;
+int control2 = 0;
+
 int pin_1 = 7; 
 int pin0  = 8;
 int pin1  = 9;
@@ -32,7 +35,11 @@ void setup() {
     Serial.begin(9600);
 }
 
-void loop() {
+void loop()
+{
+    control1 = analogRead(4);
+    control2 = analogRead(5);
+  
     digitalWrite(pin_1, pin_1);
     digitalWrite(pin0,  out0);
     digitalWrite(pin1,  out1);
@@ -40,6 +47,8 @@ void loop() {
     digitalWrite(pin3,  out3);
     digitalWrite(pin4,  out4);
     digitalWrite(pin5,  out5);
+   
+    Serial.println(control1);
 }
 
 void divide() {
@@ -57,5 +66,5 @@ void divide() {
   //Modulo equal to by the LCM of all clock divisions to reset counter 
   count %= 420;
   
-  Serial.print("\n");
+  //Serial.print("\n");
 }
