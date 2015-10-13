@@ -51,6 +51,7 @@ void loop()
     digitalWrite(pin5,  out5);
    
     Serial.println(control1);
+    Serial.println(control2);
 }
 
 void divide() {
