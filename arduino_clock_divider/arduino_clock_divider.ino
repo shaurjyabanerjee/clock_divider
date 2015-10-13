@@ -2,7 +2,6 @@
 //Shaurjya Banerjee & Ness Morris 2016
 
 //With controls
-
 int control1 = 0;
 int control2 = 0;
 
@@ -69,5 +68,5 @@ void divide() {
   //Modulo equal to by the LCM of all clock divisions to reset counter 
   count %= 420;
   
-  //Serial.print("\n");
+  Serial.print("\n");
 }
