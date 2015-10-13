@@ -1,6 +1,8 @@
 //Arduino Clock Divider for Modular Synthesis 
 //Shaurjya Banerjee & Ness Morris 2016
 
+//With controls
+
 int control1 = 0;
 int control2 = 0;
 
