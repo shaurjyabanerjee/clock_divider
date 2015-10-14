@@ -91,7 +91,21 @@ fun void serialListener()
             if(matches[0] == "!")
             {
                 chout<="bang!"<=IO.nl();
+                
+                //Randomness for sequencer
+                if (jump == 0)
+                {
+                    Math.random2(0,3) => which;
+                }
+                //Call the Drum and Bass sequencer with each clock input
+                seq(which, i_count);
+                i_count%4 => jump;
+                i_count++;
+                
+                //Reset counter
+                if (i_count >= 16) {0 => i_count;}
             }
+            
             //If the message coming in is control data from the knobs
             else
             {
