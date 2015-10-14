@@ -14,6 +14,8 @@ int pin3  = 11;
 int pin4  = 12;
 int pin5  = 13;
 
+bool bangReady;
+
 volatile bool out_1 = false;
 volatile bool out0  = false;
 volatile bool out1  = false;
@@ -57,12 +59,22 @@ void loop()
     digitalWrite(pin5,  out5);
    
     //Send serial control data to ChucK
-    Serial.println(control1);
-    Serial.println(control2);
+    Serial.print("[");
+    Serial.print(control1);
+    Serial.print(",");
+    Serial.print(control2);
+    Serial.print("]\n");
+    
+    if(bangReady){
+      Serial.println("!");
+      bangReady = false;
+    }
+    
 }
 
-//Clock divider function
-void divide() {
+//Clock divider function, attached to interrupt 1
+void divide() 
+{
  
   out_1 = !out_1;
   out0  = !out0;
@@ -77,5 +89,5 @@ void divide() {
   //Modulo equal to by the LCM of all clock divisions to reset counter 
   count %= 420;
   
-  Serial.print("\n");
+  bangReady = true;
 }

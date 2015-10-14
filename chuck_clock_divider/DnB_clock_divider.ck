@@ -36,10 +36,30 @@ SndBuf breaks => fxBuss;
 //Serial Stuff
 SerialIO serial;
 string line;
-string stringInt;
 
 int data;
 int jump, which, i_count;
+
+
+string matches[0];
+
+"(\\[([[:digit:]]+),([[:digit:]]+)\\])|!" => string pattern;
+
+//RegEx-plained
+
+//    "
+//    \\[          //double escape (ChucK only)
+//    (            //open subpattern
+//    [[:digit:]]  //look for digits only
+//    +            //modifier
+//    )            //close subpattern
+//    ,            //literal comma
+//    (            //open subpattern
+//    [[:digit:]]  //look for digits only
+//    +            //modifier
+//    )            //close subpattern
+//    \\]          //close double escape (ChucK only)
+//    "
 
 SerialIO.list() @=> string list[];
 for (int i; i < list.cap(); i++)
@@ -53,25 +73,60 @@ fun void serialListener()
 {
     while (true) 
     {
-        // Grab Serial data
-        serial.onLine() => now;
-        serial.getLine() => line;
+        //Get serial data
+        serial.onLine()=>now;
+        serial.getLine()=>line;
         
         if( line$Object == null ) continue;
+        RegEx.match(pattern, line, matches);
         
-        if (jump == 0)
+        //Filter out any bum serial
+        if(matches.cap() != 4)
         {
-            Math.random2(0,3) => which;
+            chout<="error, ignoring message"<=IO.nl();
         }
-        
-        //Call the Drum and Bass sequencer with each clock input
-        seq(which, i_count);
-        i_count%4 => jump;
-        i_count++;
-        
-        if (i_count >= 16) {0 => i_count;}
+        else
+        {
+            //If the message coming in is a timing pulse
+            if(matches[0] == "!")
+            {
+                chout<="bang!"<=IO.nl();
+            }
+            //If the message coming in is control data from the knobs
+            else
+            {
+                chout<=matches[2]<=", "<=matches[3]<=IO.nl();
+                
+                //This is to print everything coming in 
+                //for(int i;i<matches.cap();i++)
+                //{
+                //    chout<="match "<=i<=": "<=matches[i]<=IO.nl();
+                //}
+                //chout<=IO.nl();
+            }
+        }        
     }
 }
+
+//Sequencer Stuff -
+//-------------------------------------------------------------
+
+////Randomness for sequencer
+//if (jump == 0)
+//{
+//    Math.random2(0,3) => which;
+//}
+//
+////Call the Drum and Bass sequencer with each clock input
+//seq(which, i_count);
+//i_count%4 => jump;
+//i_count++;
+//
+////Reset counter
+//if (i_count >= 16) {0 => i_count;}
+
+//-------------------------------------------------------------
+
 
 //Initalize
 0.7 => master.gain;
